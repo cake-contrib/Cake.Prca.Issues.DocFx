@@ -32,17 +32,21 @@
         {
             return
                 from logEntry in this.settings.LogFileContent.Split(new[] { '{', '}' }, StringSplitOptions.RemoveEmptyEntries).Select(x => "{" + x + "}")
-                let
-                    logEntryObject = JsonConvert.DeserializeObject<JToken>(logEntry)
+                let logEntryObject = JsonConvert.DeserializeObject<JToken>(logEntry)
+                let severity = (string)logEntryObject.SelectToken("message_severity")
+                let file = (string)logEntryObject.SelectToken("file")
+                let message = (string)logEntryObject.SelectToken("message")
+                let source = (string)logEntryObject.SelectToken("source") ?? "DocFx"
                 where
-                    (string)logEntryObject.SelectToken("message_severity") == "warning"
+                    severity == "warning" &&
+                    !string.IsNullOrWhiteSpace(message)
                 select
                     new CodeAnalysisIssue<DocFxIssuesProvider>(
-                        (string)logEntryObject.SelectToken("file"),
+                        file,
                         null,
-                        (string)logEntryObject.SelectToken("message"),
+                        message,
                         0,
-                        (string)logEntryObject.SelectToken("source"));
+                        source);
         }
     }
 }
