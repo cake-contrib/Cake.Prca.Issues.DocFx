@@ -8,7 +8,6 @@
     /// Contains functionality related to importing warnings from DocFx to write them to pull requests.
     /// </summary>
     [CakeAliasCategory(CakeAliasConstants.MainCakeAliasCategory)]
-    [CakeNamespaceImport("Cake.Prca.Issues.DocFx")]
     public static class DocFxIssuesProviderAliases
     {
         /// <summary>
