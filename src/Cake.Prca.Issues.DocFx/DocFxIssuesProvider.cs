@@ -43,6 +43,7 @@
                 let logEntryObject = JsonConvert.DeserializeObject<JToken>(logEntry)
                 let severity = (string)logEntryObject.SelectToken("message_severity")
                 let file = this.TryGetFile(logEntryObject, docRootPath)
+                let line = (int?)logEntryObject.SelectToken("line")
                 let message = (string)logEntryObject.SelectToken("message")
                 let source = (string)logEntryObject.SelectToken("source") ?? "DocFx"
                 where
@@ -51,7 +52,7 @@
                 select
                     new CodeAnalysisIssue<DocFxIssuesProvider>(
                         file,
-                        null,
+                        line,
                         message,
                         0,
                         source);

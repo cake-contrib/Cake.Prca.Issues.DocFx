@@ -86,6 +86,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <EmbeddedResource Include="Testfiles\docfx.json" />
+    <EmbeddedResource Include="Testfiles\entry-with-line.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
