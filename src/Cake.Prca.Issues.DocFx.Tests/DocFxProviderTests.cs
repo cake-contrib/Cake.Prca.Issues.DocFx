@@ -65,6 +65,27 @@
                     "Invalid cross reference \"[Foo](xref:foo)\".");
             }
 
+            [Fact]
+            public void Should_Read_Line_Correct()
+            {
+                // Given
+                var fixture = new DocFxProviderFixture("entry-with-line.json", @"/");
+
+                // When
+                var issues = fixture.ReadIssues().ToList();
+
+                // Then
+                issues.Count.ShouldBe(1);
+                CheckIssue(
+                    issues[0],
+                    @"bar.md",
+                    45,
+                    "Build Document.LinkPhaseHandler.ConceptualDocumentProcessor.Save",
+                    null,
+                    0,
+                    "Invalid file link:(~/foo.md).");
+            }
+
             private static void CheckIssue(
                 ICodeAnalysisIssue issue,
                 string affectedFileRelativePath,
