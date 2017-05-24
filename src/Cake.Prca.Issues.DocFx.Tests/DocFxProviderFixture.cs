@@ -3,11 +3,12 @@
     using System.Collections.Generic;
     using System.IO;
     using Core.Diagnostics;
+    using Core.IO;
     using Testing;
 
     internal class DocFxProviderFixture
     {
-        public DocFxProviderFixture(string fileResourceName)
+        public DocFxProviderFixture(string fileResourceName, DirectoryPath docRootPath)
         {
             this.Log = new FakeLog { Verbosity = Verbosity.Normal };
 
@@ -17,7 +18,8 @@
                 {
                     this.Settings =
                         DocFxIssuesSettings.FromContent(
-                            sr.ReadToEnd());
+                            sr.ReadToEnd(),
+                            docRootPath);
                 }
             }
 

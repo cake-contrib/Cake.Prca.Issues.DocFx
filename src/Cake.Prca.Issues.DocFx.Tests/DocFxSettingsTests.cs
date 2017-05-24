@@ -4,6 +4,7 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using Core.IO;
     using Shouldly;
     using Xunit;
 
@@ -16,7 +17,7 @@
             {
                 // Given / When
                 var result = Record.Exception(() =>
-                    DocFxIssuesSettings.FromFilePath(null));
+                    DocFxIssuesSettings.FromFilePath(null, @"c:\Source\Cake.Prca\docs"));
 
                 // Then
                 result.IsArgumentNullException("logFilePath");
@@ -27,7 +28,7 @@
             {
                 // Given / When
                 var result = Record.Exception(() =>
-                    DocFxIssuesSettings.FromContent(null));
+                    DocFxIssuesSettings.FromContent(null, @"c:\Source\Cake.Prca\docs"));
 
                 // Then
                 result.IsArgumentNullException("logFileContent");
@@ -38,7 +39,7 @@
             {
                 // Given / When
                 var result = Record.Exception(() =>
-                    DocFxIssuesSettings.FromContent(string.Empty));
+                    DocFxIssuesSettings.FromContent(string.Empty, @"c:\Source\Cake.Prca\docs"));
 
                 // Then
                 result.IsArgumentOutOfRangeException("logFileContent");
@@ -49,29 +50,48 @@
             {
                 // Given / When
                 var result = Record.Exception(() =>
-                    DocFxIssuesSettings.FromContent(" "));
+                    DocFxIssuesSettings.FromContent(" ", @"c:\Source\Cake.Prca\docs"));
 
                 // Then
                 result.IsArgumentOutOfRangeException("logFileContent");
             }
 
             [Fact]
-            public void Should_Set_Property_Values_Passed_To_Constructor()
+            public void Should_Set_LogFileContent()
             {
                 // Given
                 const string logFileContent = "foo";
 
                 // When
-                var settings = DocFxIssuesSettings.FromContent(logFileContent);
+                var settings =
+                    DocFxIssuesSettings.FromContent(
+                        logFileContent,
+                        @"c:\Source\Cake.Prca\docs");
 
                 // Then
                 settings.LogFileContent.ShouldBe(logFileContent);
             }
 
             [Fact]
+            public void Should_Set_DocRootPath()
+            {
+                // Given
+                DirectoryPath docRootPath = @"c:\Source\Cake.Prca\docs";
+
+                // When
+                var settings =
+                    DocFxIssuesSettings.FromContent(
+                        "foo",
+                        docRootPath);
+
+                // Then
+                settings.DocRootPath.ShouldBe(docRootPath);
+            }
+
+            [Fact]
             public void Should_Read_File_From_Disk()
             {
-                var fileName = Path.GetTempFileName();
+                var fileName = System.IO.Path.GetTempFileName();
                 try
                 {
                     // Given
@@ -92,7 +112,7 @@
 
                     // When
                     var settings =
-                        DocFxIssuesSettings.FromFilePath(fileName);
+                        DocFxIssuesSettings.FromFilePath(fileName, @"c:\Source\Cake.Prca\docs");
 
                     // Then
                     settings.LogFileContent.ShouldBe(expected);

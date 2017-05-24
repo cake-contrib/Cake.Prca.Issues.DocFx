@@ -17,7 +17,7 @@
                 var result = Record.Exception(() =>
                     new DocFxIssuesProvider(
                         null,
-                        DocFxIssuesSettings.FromContent("Foo")));
+                        DocFxIssuesSettings.FromContent("Foo", @"c:\Source\Cake.Prca")));
 
                 // Then
                 result.IsArgumentNullException("log");
@@ -38,11 +38,17 @@
 
         public sealed class TheReadIssuesMethod
         {
-            [Fact]
-            public void Should_Read_Issue_Correct()
+            [Theory]
+            [InlineData(@"c:\Source\Cake.Prca\docs", "docs/")]
+            [InlineData(@"docs", "docs/")]
+            [InlineData(@"c:\Source\Cake.Prca\src\docs", "src/docs/")]
+            [InlineData(@"src\docs", "src/docs/")]
+            [InlineData(@"c:\Source\Cake.Prca", "")]
+            [InlineData(@"/", "")]
+            public void Should_Read_Issue_Correct(string docRootPath, string docRelativePath)
             {
                 // Given
-                var fixture = new DocFxProviderFixture("docfx.json");
+                var fixture = new DocFxProviderFixture("docfx.json", docRootPath);
 
                 // When
                 var issues = fixture.ReadIssues().ToList();
@@ -51,12 +57,33 @@
                 issues.Count.ShouldBe(1);
                 CheckIssue(
                     issues[0],
-                    @"index.md",
+                    docRelativePath + @"index.md",
                     null,
                     "Build Document.LinkPhaseHandler.Apply Templates",
                     null,
                     0,
                     "Invalid cross reference \"[Foo](xref:foo)\".");
+            }
+
+            [Fact]
+            public void Should_Read_Line_Correct()
+            {
+                // Given
+                var fixture = new DocFxProviderFixture("entry-with-line.json", @"/");
+
+                // When
+                var issues = fixture.ReadIssues().ToList();
+
+                // Then
+                issues.Count.ShouldBe(1);
+                CheckIssue(
+                    issues[0],
+                    @"bar.md",
+                    45,
+                    "Build Document.LinkPhaseHandler.ConceptualDocumentProcessor.Save",
+                    null,
+                    0,
+                    "Invalid file link:(~/foo.md).");
             }
 
             private static void CheckIssue(
