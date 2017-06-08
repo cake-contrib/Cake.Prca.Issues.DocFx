@@ -22,7 +22,7 @@
         /// <code>
         /// <![CDATA[
         ///     var repoRoot = new DirectoryPath("c:\repo");
-        ///     ReportCodeAnalysisIssuesToPullRequest(
+        ///     ReportIssuesToPullRequest(
         ///         DocFxIssuesFromFilePath(
         ///             "C:\build\docfx.log"),
         ///         TfsPullRequests(
@@ -58,7 +58,7 @@
         /// <code>
         /// <![CDATA[
         ///     var repoRoot = new DirectoryPath("c:\repo");
-        ///     ReportCodeAnalysisIssuesToPullRequest(
+        ///     ReportIssuesToPullRequest(
         ///         DocFxIssuesFromFilePath(
         ///             "C:\build\docfx.log",
         ///             "C:\build\doc"),
@@ -96,7 +96,7 @@
         /// <code>
         /// <![CDATA[
         ///     var repoRoot = new DirectoryPath("c:\repo");
-        ///     ReportCodeAnalysisIssuesToPullRequest(
+        ///     ReportIssuesToPullRequest(
         ///         DocFxIssuesFromContent(
         ///             logFileContent),
         ///         TfsPullRequests(
@@ -132,7 +132,7 @@
         /// <code>
         /// <![CDATA[
         ///     var repoRoot = new DirectoryPath("c:\repo");
-        ///     ReportCodeAnalysisIssuesToPullRequest(
+        ///     ReportIssuesToPullRequest(
         ///         DocFxIssuesFromContent(
         ///             logFileContent,
         ///             "C:\build\doc"),
@@ -172,7 +172,7 @@
         ///     var settings =
         ///         new DocFxIssuesSettings("C:\build\docfx.log");
         ///
-        ///     ReportCodeAnalysisIssuesToPullRequest(
+        ///     ReportIssuesToPullRequest(
         ///         DocFxIssues(settings),
         ///         TfsPullRequests(
         ///             new Uri("http://myserver:8080/tfs/defaultcollection/myproject/_git/myrepository"),
